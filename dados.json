@@ -1,0 +1,18 @@
+{
+  "hierarquia": [
+    { "nome": "AUX. Santos", "id": "144", "cargo": "Auxiliar", "cor": "#00ffff" },
+    { "nome": "SUB. Grossi", "id": "44715", "cargo": "Sub", "cor": "#00ffff" }
+  ],
+  "status": [
+    { "nome": "AUX. Santos", "status": "Ativo" },
+    { "nome": "SUB. Grossi", "status": "Inativo" }
+  ],
+  "recrutamentos": [
+    { "nome": "AUX. Santos", "quantidade": 3 },
+    { "nome": "SUB. Grossi", "quantidade": 1 }
+  ],
+  "resultado": [
+    { "nome": "AUX. Santos", "status": "verde" },
+    { "nome": "SUB. Grossi", "status": "vermelho" }
+  ]
+}

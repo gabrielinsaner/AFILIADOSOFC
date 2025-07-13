@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Recrutadores - Maresia RP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+      background: linear-gradient(135deg, #000000, #001f1f);
+    }
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      top: 0;
+      left: 0;
+    }
+    .container {
+      border-radius: 20px;
+      margin: 3rem auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 1200px;
+      background: rgba(0, 10, 20, 0.85);
+      backdrop-filter: blur(10px);
+      overflow-y: auto;
+      max-height: 90vh;
+      box-shadow: 0 0 30px #00ffffaa;
+      animation: fadeInContainer 1s ease-in-out;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #00ffff;
+      text-shadow: 0 0 15px #00ffffaa;
+      animation: pulseGlow 2s infinite;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #00ffff44;
+      text-align: left;
+    }
+    th { background-color: #00ffff22; }
+    .tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #000;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    .Ativo { background-color: #00ff99; box-shadow: 0 0 15px #00ff99; }
+    .Inativo { background-color: #ffcc00; box-shadow: 0 0 15px #ffcc00; }
+    .Desligamento { background-color: #ff3333; box-shadow: 0 0 15px #ff3333; }
+    .verde { background-color: #00ff00; color: #000; }
+    .vermelho { background-color: #ff0000; color: #fff; }
+    footer {
+      text-align: center;
+      color: #ccc;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { text-shadow: 0 0 15px #00ffffaa; }
+      50% { text-shadow: 0 0 30px #00ffffcc; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="container">
+    <h1>🔰 Controle de Recrutadores - Maresia RP</h1>
+
+    <div class="section">
+      <h2>📌 Estrutura Hierárquica</h2>
+      <table id="tabela-hierarquia">
+        <tr><th>Nome</th><th>ID</th><th>Cargo</th></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>📊 Status de Atividade</h2>
+      <table id="tabela-status">
+        <tr><th>Nome</th><th>Status</th></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>📈 Recrutamentos por Membro</h2>
+      <table id="tabela-recrutamentos">
+        <tr><th>Nome</th><th>Quantidade</th></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>📅 Resultado do Dia</h2>
+      <table id="tabela-resultado">
+        <tr><th>Nome</th><th>Status</th></tr>
+      </table>
+    </div>
+
+    <footer>
+      Desenvolvido para a cidade Maresia RP - Santa Grup • Afiliados ✨
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        color: { value: "#00ffff" },
+        shape: { type: "edge" },
+        opacity: { value: 0.5 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 130,
+          color: "#00ffff",
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          random: false,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.7 } },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+
+    const jsonUrl = "https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/main/dados.json"; // 🟡 Edite aqui!
+
+    fetch(jsonUrl)
+      .then(res => {
+        if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        const { hierarquia = [], status = [], recrutamentos = [], resultado = [] } = data;
+
+        const tabelaHierarquia = document.getElementById("tabela-hierarquia");
+        hierarquia.forEach(p => {
+          tabelaHierarquia.innerHTML += `<tr><td style='color:${p.cor || "#00ffff"}'>${p.nome}</td><td>${p.id}</td><td>${p.cargo}</td></tr>`;
+        });
+
+        const tabelaStatus = document.getElementById("tabela-status");
+        status.forEach(p => {
+          tabelaStatus.innerHTML += `<tr><td>${p.nome}</td><td><span class='tag ${p.status}'>${p.status}</span></td></tr>`;
+        });
+
+        const tabelaRecrutamentos = document.getElementById("tabela-recrutamentos");
+        recrutamentos.forEach(p => {
+          tabelaRecrutamentos.innerHTML += `<tr><td>${p.nome}</td><td>${p.quantidade}</td></tr>`;
+        });
+
+        const tabelaResultado = document.getElementById("tabela-resultado");
+        resultado.forEach(p => {
+          tabelaResultado.innerHTML += `<tr><td>${p.nome}</td><td><span class='tag ${p.status}'>${p.status}</span></td></tr>`;
+        });
+      })
+      .catch(erro => {
+        console.error("Erro ao carregar JSON:", erro);
+        document.querySelector(".container").innerHTML += `<p style='color:red;text-align:center;'>Erro ao carregar dados. Verifique o link do JSON.</p>`;
+      });
+  </script>
+</body>
+</html>
